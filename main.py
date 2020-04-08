@@ -13,7 +13,6 @@ class Game:
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(pygame.image.load(ICON))
         self.clock = pygame.time.Clock()
-        pygame.key.set_repeat(500, 100)
         self.load_data()
 
     def load_data(self):
