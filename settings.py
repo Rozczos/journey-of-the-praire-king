@@ -1,4 +1,6 @@
 
+import pygame
+
 # Define colors (R, G, B)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -22,4 +24,6 @@ GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
 # Player settings
-PLAYER_SPEED = 150
+PLAYER_SPEED = 120
+PLAYER_IMG = "player.png"
+PLAYER_HIT_RECT = pygame.Rect(10, 16, 25, 19)

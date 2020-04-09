@@ -2,6 +2,9 @@
 import pygame
 from settings import *
 
+def collide_hit_rect(one, two):
+    return one.hit_rect.colliderect(two.rect)
+
 class Map:
     def __init__(self, filename):
         self.data = []

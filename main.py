@@ -17,7 +17,9 @@ class Game:
 
     def load_data(self):
         game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, "assets/img")
         self.map = Map(path.join(game_folder, "map.txt"))
+        self.player_img = pygame.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
 
     def new(self):
         # Initialize all variables and do all the setup for a new game
@@ -58,6 +60,7 @@ class Game:
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
+        #pygame.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
         pygame.display.flip()
 
     def events(self):

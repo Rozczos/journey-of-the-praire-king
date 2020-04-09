@@ -1,63 +1,64 @@
 
 import pygame
 from settings import *
+from tilemap import collide_hit_rect
+vec = pygame.math.Vector2
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(YELLOW)
+        self.image = game.player_img
         self.rect = self.image.get_rect()
-        self.vx, self.vy = 0, 0
-        self.x = x * TILESIZE
-        self.y = y * TILESIZE
+        self.hit_rect = PLAYER_HIT_RECT
+        self.hit_rect.midbottom = self.rect.midbottom
+        self.vel = vec(0, 0)
+        self.pos = vec(x, y) * TILESIZE
 
     def get_keys(self):
-        self.vx, self.vy = 0, 0
+        self.vel = vec(0, 0)
         k = pygame.key.get_pressed()
         if k[pygame.K_w]:
-            self.vy = -PLAYER_SPEED
+            self.vel.y = -PLAYER_SPEED
         if k[pygame.K_s]:
-            self.vy = PLAYER_SPEED
+            self.vel.y = PLAYER_SPEED
         if k[pygame.K_a]:
-            self.vx = -PLAYER_SPEED
+            self.vel.x = -PLAYER_SPEED
         if k[pygame.K_d]:
-            self.vx = PLAYER_SPEED
-        if self.vx != 0 and self.vy != 0:
-            self.vx *= 0.7071
-            self.vy *= 0.7071
+            self.vel.x = PLAYER_SPEED
+        if self.vel.x != 0 and self.vel.y != 0:
+            self.vel *= 0.7071
 
     def collide_with_walls(self, direction):
         if direction == "x":
-            hits = pygame.sprite.spritecollide(self, self.game.walls, False)
+            hits = pygame.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
             if hits:
-                if self.vx > 0:
-                    self.x = hits[0].rect.left - self.rect.width
-                if self.vx < 0:
-                    self.x = hits[0].rect.right
-                self.vx = 0
-                self.rect.x = self.x
+                if self.vel.x > 0:
+                    self.pos.x = hits[0].rect.left - self.hit_rect.width
+                if self.vel.x < 0:
+                    self.pos.x = hits[0].rect.right
+                self.vel.x = 0
+                self.hit_rect.x = self.pos.x
 
         if direction == "y":
-            hits = pygame.sprite.spritecollide(self, self.game.walls, False)
+            hits = pygame.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
             if hits:
-                if self.vy > 0:
-                    self.y = hits[0].rect.top - self.rect.height
-                if self.vy < 0:
-                    self.y = hits[0].rect.bottom
-                self.vy = 0
-                self.rect.y = self.y
+                if self.vel.y > 0:
+                    self.pos.y = hits[0].rect.top - self.hit_rect.height
+                if self.vel.y < 0:
+                    self.pos.y = hits[0].rect.bottom
+                self.vel.y = 0
+                self.hit_rect.y = self.pos.y
 
     def update(self):
         self.get_keys()
-        self.x += self.vx * self.game.dt
-        self.y += self.vy * self.game.dt
-        self.rect.x= self.x
+        self.pos += self.vel * self.game.dt
+        self.hit_rect.x= self.pos.x
         self.collide_with_walls("x")
-        self.rect.y= self.y
+        self.hit_rect.y= self.pos.y
         self.collide_with_walls("y")
+        self.rect.midbottom = self.hit_rect.midbottom
 
 
 class Wall(pygame.sprite.Sprite):
