@@ -20,17 +20,22 @@ class Game:
         img_folder = path.join(game_folder, "assets/img")
         self.map = Map(path.join(game_folder, "map.txt"))
         self.player_img = pygame.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        self.mob_img = pygame.image.load(path.join(img_folder, MOB_IMG)).convert_alpha()
+        self.wall_img = pygame.image.load(path.join(img_folder, WALL_IMG)).convert_alpha()
 
     def new(self):
         # Initialize all variables and do all the setup for a new game
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.mobs = pygame.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == "1":
                     Wall(self, col, row)
                 if tile == "P":
                     self.player = Player(self, col, row)
+                if tile == "M":
+                    self.mob = Mob(self, col, row)
         
 
     def run(self):
@@ -57,10 +62,14 @@ class Game:
             pygame.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
+        # Show framerate
+        pygame.display.set_caption("{:.2f}".format(self.clock.get_fps()))
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
+        # Hit rectangle drawing
         #pygame.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
+        #pygame.draw.rect(self.screen, WHITE, self.mob.hit_rect, 2)
         pygame.display.flip()
 
     def events(self):
