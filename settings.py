@@ -32,6 +32,12 @@ PLAYER_SPEED = 120
 PLAYER_IMG = "player.png"
 PLAYER_HIT_RECT = pygame.Rect(10, 16, 25, 19)
 
+# Gun settings
+BULLET_IMG = "bullet.png"
+BULLET_SPEED = 300
+BULLET_LIFETIME = 2300
+BULLET_RATE = 400
+
 # Mob settings
 MOB_IMG = "mob.png"
 MOB_SPEED = 60
