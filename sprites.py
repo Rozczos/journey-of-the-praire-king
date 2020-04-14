@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.hit_rect = PLAYER_HIT_RECT
         self.hit_rect.midbottom = self.rect.midbottom
         self.vel = vec(0, 0)
-        self.pos = vec(x, y) * TILESIZE
+        self.pos = vec(x, y)
         self.last_shot = 0
 
     def get_keys(self):
@@ -107,6 +107,7 @@ class Mob(pygame.sprite.Sprite):
         self.vel = vec(0, 0)
         self.rect.center = self.pos
         self.rot = 0
+        self.health = MOB_HEALTH
 
     def update(self):
         self.rot = (self.game.player.pos - self.pos).angle_to(vec(1,0))
@@ -120,6 +121,9 @@ class Mob(pygame.sprite.Sprite):
         self.hit_rect.centery = self.pos.y
         collide_with_walls(self, self.game.walls, "y")
         self.rect.center = self.hit_rect.center
+        # Killing mob
+        if self.health <= 0:
+            self.kill()
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, game, pos, dir):
@@ -152,3 +156,14 @@ class Wall(pygame.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.groups = game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.rect = pygame.Rect(x, y, w, h)
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y

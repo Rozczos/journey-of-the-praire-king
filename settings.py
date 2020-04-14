@@ -37,8 +37,10 @@ BULLET_IMG = "bullet.png"
 BULLET_SPEED = 300
 BULLET_LIFETIME = 2300
 BULLET_RATE = 400
+BULLET_DAMAGE = 50
 
 # Mob settings
 MOB_IMG = "mob.png"
 MOB_SPEED = 60
 MOB_HIT_RECT = pygame.Rect(0, 0, 32, 32)
+MOB_HEALTH = 100
